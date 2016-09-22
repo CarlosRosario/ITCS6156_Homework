@@ -1,11 +1,19 @@
 
 loadAllData;
 
+%% Filter by information gain
 
+d = 5000;
+
+gain = calculateInformationGain(trainData, trainLabels);
+[~, I] = sort(gain, 'descend');
+
+%trainData = trainData(I(1:d), :);
+%testData = testData(I(1:d), :);
 
 %% Try naive Bayes with hard-coded alpha value
 
-nbParams.alpha = .5;
+nbParams.alpha = 1;
 nbParams.numberOfClasses = size(map,1); % added the number of classes to nbParams
 
 %nbModel = naiveBayesTrainTesting(trainData, trainLabels, nbParams);
@@ -14,38 +22,26 @@ nbParams.numberOfClasses = size(map,1); % added the number of classes to nbParam
 
 % compute training accuracy
 
-nbTrainMaxVals = zeros(length(trainLabels), 1);
+nbMaxVals = zeros(length(trainLabels), 1);
 nbTrainPredictions = zeros(length(trainLabels), 1);
 
 for i = 1:length(trainLabels)
-    [nbTrainMaxVals(i), nbTrainPredictions(i)] = naiveBayesPredict(trainData(:,i), likelihood_model, priors); %trainData(:,i) contains ONLY the words that belong to document i
+    [nbMaxVals(i), nbTrainPredictions(i)] = naiveBayesPredict(trainData(:,i), likelihood_model, priors); %trainData(:,i) contains ONLY the words that belong to document i
 end
 
 nbTrainAccuracy = nnz(nbTrainPredictions == trainLabels) ./ length(trainLabels)
 
 % compute testing accuracy
-
-nbMaxVals = zeros(length(testLabels), 1);
-nbPredictions = zeros(length(testLabels), 1);
-
-for i = 1:length(testLabels)
-    [nbMaxVals(i), nbPredictions(i)] = naiveBayesPredict(testData(:,i), likelihood_model, priors);
-end
-
-nbAccuracy = nnz(nbPredictions == testLabels) ./ length(testLabels)
-
-
-%% Filter by information gain
-
- d = 5000;
- 
-gain = calculateInformationGain(trainData, trainLabels);
-[~, I] = sort(gain, 'descend');
- 
-trainData = trainData(I(1:d), :);
-testData = testData(I(1:d), :);
- 
-
+% 
+% nbPredictions = zeros(length(testLabels), 1);
+% 
+% for i = 1:length(testLabels)
+%     nbPredictions(i) = naiveBayesPredict(testData(:,i), nbModel);
+% end
+% 
+% nbAccuracy = nnz(nbPredictions == testLabels) ./ length(testLabels)
+% 
+% 
 % %% Try decision tree with hard-coded maximum depth
 % 
 % dtParams.maxDepth = 16;

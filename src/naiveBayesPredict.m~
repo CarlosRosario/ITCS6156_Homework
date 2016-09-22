@@ -1,0 +1,13 @@
+function [max_val label] = naiveBayesPredict(data, likelihood_model, priors)
+
+% FILL IN YOUR CODE AND COMMENTS HERE
+
+wordsInThisDocument = find(data == 1);
+probabilitiesForEachWord = likelihood_model(:,wordsInThisDocument);
+final = (prod(probabilitiesForEachWord,2)) .* priors ; % the numbers in prod(probabilitiesForEachWord,2) are ridiculously small
+
+% This performs the "prediction" by choosing the highest
+[max_val, class_index] = max(post);
+
+
+label = class_index; % replace this with your actual label
