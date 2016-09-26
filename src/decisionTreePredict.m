@@ -1,5 +1,9 @@
-function label = decisionTreePredict(data, model)
+function labels = decisionTreePredict(data, model)
 
 % FILL IN YOUR CODE AND COMMENTS HERE
+data = full(data); % Un-sparse the matrix
+data = double(data); % fitctree needs trainData to have double vlaues
+data = data'; % transpose trainData to match trainLabels
 
-label = 0; % replace this with your actual label
+labels = predict(model, data);
+
